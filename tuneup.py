@@ -22,10 +22,11 @@ def profile(func):
     def wrapper(*args, **kwargs):
         pr = cProfile.Profile()
         pr.enable()
-        func(*args, **kwargs)
+        result = func(*args, **kwargs)
         pr.disable()
         p = pstats.Stats(pr)
         p.strip_dirs().sort_stats(SortKey.CUMULATIVE).print_stats(10)
+        return result
 
     return wrapper
 
@@ -66,10 +67,10 @@ def timeit_helper():
     """Part A: Obtain some profiling measurements using timeit."""
     t = timeit.Timer(stmt="""find_duplicate_movies('movies.txt')""",
                      setup="""from __main__ import find_duplicate_movies""")
-    result = t.repeat(repeat=7, number=3)
+    result = t.repeat(repeat=7, number=5)
     smallest = min(result)
-    best_time = smallest / 3
-    print(f'Best time across 7 repeats of 3 runs per repeat: {best_time} sec')
+    best_time = smallest / 5
+    print(f'Best time across 7 repeats of 5 runs per repeat: {best_time} sec')
 
 
 def main():
